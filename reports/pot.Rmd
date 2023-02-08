@@ -1,0 +1,36 @@
+---
+title: "Fungicide efficiency for peanut smut"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(car)
+library(tidyverse)
+```
+
+## Pots experiments
+
+### Data
+
+```{r}
+load("~/Dropbox/Papers/1 In progress/carbon_mani/data/pot_data.RData")
+
+dat %>% 
+  filter(ai == "Check") %>% 
+  group_by(year) %>% 
+  summarise(mean = mean((x3+x4)/n_pods),
+            min = min((x3+x4)/n_pods),
+            max = max((x3+x4)/n_pods))
+```
+
+### Results
+
+```{r}
+load("../data/pot_model.rda")
+Anova(m)
+res %>% 
+  select(year, ai, prob, asymp.LCL, asymp.UCL, .group) %>%
+  knitr::kable(digits = c(0, 0, 2, 2, 2, 0))
+```
+
